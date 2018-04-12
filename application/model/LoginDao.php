@@ -16,13 +16,26 @@ class LoginDao extends Model{
             ->find();
     }
 
-    public function do_login_log($account, $password, $desc, $ip, $user_id = ''){
-        $data = ['usr_id' => $user_id, 'usr_name' => $account, 'desc' => $desc, 'time' => date('Y-m-d H:i:s'), 'ip' => $ip, 'pwd' => $password];
-        Db::table('admin_login_log')->data($data)->insert();
-    }
-
     public function GetInfo($user_id){
         return Db::table('admins')->where('id = ' . $user_id)->find();
     }
+
+    public function get_roles_info($user_id){
+        return  Db::table('tb_user_role_access')
+            ->alias('a')
+            ->join(['tb_roles'=>'r'],'a.role_id=r.id','left')
+            ->where('a.user_id="'.$user_id.'"')
+            ->field('a.user_id,r.*')
+            ->find();
+    }
+
+    public function get_module_list(){
+        return Db::table('tb_menues')->where('status = 0')->select();
+    }
+
+    public function get_menu_list($pid){
+        return Db::table('tb_menues')->where('status = 0')->where('pid='.$pid)->select();
+    }
+
 
  }

@@ -59,7 +59,22 @@
             <!--- Divider -->
             <div id="sidebar-menu">
                 <ul>
-                    <!---菜单列表-->
+                    {foreach name='menu_list' item='menu'}
+                    <li class="text-muted menu-title"><i class="md md-menu"></i>{$menu.name}</li>
+                    {foreach name='$menu.p_menu' item='p_menu'}
+                    <li class="has_sub">
+                        <a href="#" class="waves-light" data-url="{$p_menu.url}"><span>{$p_menu.name}</span></a>
+                        {if $p_menu.c_menu}
+                        <ul class="list-unstyled">
+                            {foreach name='$p_menu.c_menu' item='c_menu'}
+                            <!--<li><a data-id="{$c_menu.id}" data-pid="{$c_menu.pid}" data-url="{$c_menu.url}" data-tabid="{$c_menu.tabid}" href="{$c_menu.url}" target="main_data">{$c_menu.name}</a></li>-->
+                            <li><a data-id="{$c_menu.id}" data-pid="{$c_menu.pid}" data-url="{$c_menu.url}" data-tabid="{$c_menu.tabid}" href="{$c_menu.url}">{$c_menu.name}</a></li>
+                            {/foreach}
+                        </ul>
+                        {/if}
+                    </li>
+                    {/foreach}
+                    {/foreach}
                 </ul>
                 <div class="clearfix"></div>
             </div>
