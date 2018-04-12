@@ -1,4 +1,8 @@
- if (!-e $request_filename) {
-        rewrite  ^(.*)$  /index.php?s=/$1  last;
-        break;
-}
+<IfModule mod_rewrite.c>
+Options +FollowSymlinks -Multiviews
+RewriteEngine on
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php?/$1 [QSA,PT,L]
+</IfModule>
