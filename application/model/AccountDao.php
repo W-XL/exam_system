@@ -4,7 +4,7 @@ namespace app\model;
 use think\Model;
 use think\Db;
 
-class MenuDao extends Model{
+class AccountDao extends Model{
 
     public function get_cate_menu($pid){
         return Db::table('tb_menues')->where('status = 0')->where('pid='.$pid)->select();
@@ -26,10 +26,8 @@ class MenuDao extends Model{
             ->insert();
     }
 
-    public function update_menu($params){
-        Db::table('tb_menues')
-            ->where('id',$params['id'])
-            ->update(['name'=>$params['name'],'pid'=>$params['pid'],'url'=>$params['url'],'status'=>$params['status']]);
+    public function get_account_list(){
+        return Db::table('tb_users')->where('is_del = 0')->select();
     }
 
 

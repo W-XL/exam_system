@@ -4,7 +4,7 @@
             <div class="row">
                 <!--按钮或搜索区域-->
                 <div class="col-sm-12 text-xs-center">
-                    <button data-action="modal" class="btn btn-default m-b-20" href="{:url('Menu/add_view')}"><i class="fa fa-plus m-r-5"></i>添加顶级菜单</button>
+                    <button data-action="modal" class="btn btn-default m-b-20" href="{:url('Menu/add_view',['id'=>'0'])}"><i class="fa fa-plus m-r-5"></i>添加顶级菜单</button>
                 </div>
                 <!--end--->
             </div>
@@ -31,8 +31,8 @@
                             <td>{$parent.url}</td>
                             <td>{if condition='$parent.status eq 0'}<span class="text-success">显示</span>{else}<span class="text-danger">隐藏</span>{/if}</td>
                             <td>
-                                <a class="btn btn-default btn-sm" data-action="modal" href="menu.php?act=edit&id={$parent.id}">编辑</a>
-                                <a class="btn btn-default btn-sm" data-action="modal" href="menu.php?act=add&id={$parent.id}">增加子菜单</a>
+                                <a class="btn btn-default btn-sm" data-action="modal" href="{:url('Menu/edit_view',['id'=>$parent.id])}">编辑</a>
+                                <a class="btn btn-default btn-sm" data-action="modal" href="{:url('Menu/add_view',['id'=>$parent.id])}">增加子菜单</a>
                             </td>
                         </tr>
                         {neq  name='$parent.sub_list|count' value='0'}
@@ -45,8 +45,8 @@
                             <td>{$sub.url}</td>
                             <td>{if condition='$sub.status eq 0'}<span class="text-success">显示</span>{else}<span class="text-danger">隐藏</span>{/if}</td>
                             <td>
-                                <a class="btn btn-default btn-sm" data-action="modal" href="">编辑</a>
-                                <a class="btn btn-default btn-sm" data-action="modal" href="menu.php?act=add&id={$sub.id}">增加子菜单</a>
+                                <a class="btn btn-default btn-sm" data-action="modal" href="{:url('Menu/edit_view',['id'=>$sub.id])}">编辑</a>
+                                <a class="btn btn-default btn-sm" data-action="modal" href="{:url('Menu/add_view',['id'=>$sub.id])}">增加子菜单</a>
                             </td>
                         </tr>
                         {neq name="$sub.child_list|count" value="0"}
@@ -57,7 +57,7 @@
                             <td>{$child.url}</td>
                             <td>{if condition='$child.status eq 0'}<span class="text-success">显示</span>{else}<span class="text-danger">隐藏</span>{/if}</td>
                             <td>
-                                <a class="btn btn-default btn-sm" data-action="modal" href="">编辑</a>
+                                <a class="btn btn-default btn-sm" data-action="modal" href="{:url('Menu/edit_view',['id'=>$child.id])}">编辑</a>
                             </td>
                         </tr>
                         {/foreach}

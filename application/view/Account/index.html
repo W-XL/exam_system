@@ -1,0 +1,74 @@
+<link href="__STATIC__/assets/plugins/switchery/dist/switchery.min.css" rel="stylesheet" />
+<link href="__STATIC__/assets/plugins/multiselect/css/multi-select.css"  rel="stylesheet" type="text/css" />
+<link href="__STATIC__/assets/plugins/select2/select2.css" rel="stylesheet" type="text/css" />
+<link href="__STATIC__/assets/plugins/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+<script src="__STATIC__/assets/plugins/switchery/dist/switchery.min.js"></script>
+<script type="text/javascript" src="__STATIC__/assets/plugins/multiselect/js/jquery.multi-select.js"></script>
+<script type="text/javascript" src="__STATIC__/assets/plugins/jquery-quicksearch/jquery.quicksearch.js"></script>
+<script src="__STATIC__/assets/plugins/select2/select2.min.js" type="text/javascript"></script>
+<script src="__STATIC__/assets/plugins/bootstrap-select/dist/js/bootstrap-select.min.js" type="text/javascript"></script>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <div class="row">
+                <!--按钮或搜索区域-->
+                <div class="col-sm-12 text-xs-center">
+                    <button data-action="modal" class="btn btn-default m-b-20" href="{:url('Account/add_view')}"><i class="fa fa-plus m-r-5"></i>添加新用户</button>
+                </div>
+                <!--end--->
+            </div>
+            <div class="table-responsive">
+                <!---核心内容列表区域-->
+                <table class="table m-0 table-hover">
+                    <thead>
+                    <tr class="back_gray">
+                        <th>用户ID</th>
+                        <th>账号</th>
+                        <th>真实姓名</th>
+                        <th>最后登入IP</th>
+                        <th>最后登入时间</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach name='datalist' item='data'}
+                    <tr>
+                        <th scope="row">{$data.id}</th>
+                        <td>{$data.account}</td>
+                        <td>{$data.user_name}</td>
+                        <td>{$data.login_ip}</td>
+                        <td>{$data['login_time']|date='Y-m-d H:i:s',###}</td>
+                        <td>
+                            <button data-action="modal" class="btn btn-default m-b-20" href="account.php?act=password&id={$data.id}">修改密码</button>
+                            <button data-action="modal" class="btn btn-default m-b-20" href="account.php?act=edit&id={$data.id}">编辑</button>
+                            <button data-action="modal" class="btn btn-default m-b-20" href="account.php?act=menu&id={$data.id}">权限设置</button>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+                <!---内容区域end--->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row"><div class="col-lg-12"><div id="page"></div></div></div>
+<script>
+    jQuery(document).ready(function() {
+        setTimeout(function() {
+            $(".select2").select2();
+        }, 1000);
+    });
+    function search() {
+        type = $("select[name='type']").val();
+        channel = $("select[name='channel']").val();
+        user_id = $("#user_id").val();
+        url = "account.php?act=list&type="+type+"&channel="+channel+"&user_id="+user_id;
+        main_data_load(url);
+        return false;
+    }
+    function reloadsearch(){
+        url = "account.php?act=list&type=&channel=";
+        main_data_load(url);
+    }
+</script>

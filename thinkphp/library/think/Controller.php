@@ -18,7 +18,7 @@ use think\exception\ValidateException;
 class Controller
 {
     use \traits\controller\Jump;
-
+    public $page;
     /**
      * @var \think\View 视图类实例
      */
@@ -208,5 +208,34 @@ class Controller
         } else {
             return true;
         }
+    }
+
+    public function error_msg($message = '操作失败'){
+        $result['statusCode'] = "300";
+        $result['closeCurrent'] = "false";
+        $result['message'] = $message;
+        die(json_encode($result));
+    }
+
+    public function succeed_msg($message='操作成功',$tabid=''){
+        $result['statusCode']="200";
+        $result['closeCurrent']="true";
+        $result['message']=$message;
+        if($tabid){
+            $result['tabid']=$tabid;
+        }
+        $_SESSION['statusCode'] = "200";
+        die(json_encode($result));
+    }
+
+    function pageshow($page, $url){
+        // 格式化页码
+        if(!$page || intval($page) < 1) {
+            $page = 1;
+        } else if ($page>(ceil($this->DAO->total/PERPAGE))) {
+            $page=ceil($this->DAO->total/PERPAGE);
+        }
+        $page = new pageCore(array('total'=>$this->DAO->total,'perpage'=>PERPAGE,'nowindex'=>$page,'url'=>$url));
+        return $page;
     }
 }
