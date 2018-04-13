@@ -15,7 +15,7 @@ class Login extends Controller{
         return $this->fetch('login');
     }
 
-    public function do_login(){
+    public function do_login1(){
         //判断是否登录成功
         if (true){
             Session::set('user_id',71);
@@ -27,7 +27,7 @@ class Login extends Controller{
         }
     }
 
-    public function do_login2(){
+    public function do_login(){
         $params = $_POST;
         if(!$params['account'] || !$params['user_pwd']){
             $this->error("缺少必填项");
@@ -55,7 +55,7 @@ class Login extends Controller{
                 return false;
             }
         }else{
-            $menu_arr="";
+            $menu_arr = "";
             if($user_info['id']){
                 $perm_info = $login_dao->get_roles_info($user_info['id']);
                 $menu_arr =explode(',',$perm_info['rules']);

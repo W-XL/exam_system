@@ -67,8 +67,7 @@
                         {if $p_menu.c_menu}
                         <ul class="list-unstyled">
                             {foreach name='$p_menu.c_menu' item='c_menu'}
-                            <!--<li><a data-id="{$c_menu.id}" data-pid="{$c_menu.pid}" data-url="{$c_menu.url}" data-tabid="{$c_menu.tabid}" href="{$c_menu.url}" target="main_data">{$c_menu.name}</a></li>-->
-                            <li><a data-id="{$c_menu.id}" data-pid="{$c_menu.pid}" data-url="{$c_menu.url}" data-tabid="{$c_menu.tabid}" href="{$c_menu.url}">{$c_menu.name}</a></li>
+                            <li><a data-id="{$c_menu.id}" data-pid="{$c_menu.pid}" data-url="/{$c_menu.url}"  href="/{$c_menu.url}">{$c_menu.name}</a></li>
                             {/foreach}
                         </ul>
                         {/if}

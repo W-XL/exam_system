@@ -30,7 +30,7 @@ class LoginDao extends Model{
     }
 
     public function get_module_list(){
-        return Db::table('tb_menues')->where('status = 0')->select();
+        return Db::table('tb_menues')->where('status = 0 and pid = 0')->select();
     }
 
     public function get_menu_list($pid){
