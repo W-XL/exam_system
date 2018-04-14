@@ -85,6 +85,7 @@ class Login extends Controller{
             }
             Session::set('menu_list',$m_list);
             Session::set('user_id',$user_info['id']);
+            Session::set('user_name',$user_info['account']);
             Session::delete('login_error_msg');
             return true;
         }

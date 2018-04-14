@@ -1,0 +1,55 @@
+<link href="__STATIC__/assets/plugins/switchery/dist/switchery.min.css" rel="stylesheet" />
+<link href="__STATIC__/assets/plugins/multiselect/css/multi-select.css"  rel="stylesheet" type="text/css" />
+<link href="__STATIC__/assets/plugins/select2/select2.css" rel="stylesheet" type="text/css" />
+<link href="__STATIC__/assets/plugins/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+<script src="__STATIC__/assets/plugins/select2/select2.min.js" type="text/javascript"></script>
+<script src="__STATIC__/assets/plugins/bootstrap-select/dist/js/bootstrap-select.min.js" type="text/javascript"></script>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <div class="row">
+                <!--按钮或搜索区域-->
+                <form  id="form_data">
+                    <div class="col-sm-12 text-xs-center">
+                        <div class="col-md-1">
+                            <button data-action="modal" class="btn btn-default m-b-20" href="{:url('Paper/add_question_type')}"><i class="fa fa-plus m-r-5"></i>添加题目类型</button>
+                        </div>
+                    </div>
+                </form>
+                <!--end--->
+            </div>
+            <div class="table-responsive">
+                <!---核心内容列表区域-->
+                <table class="table table-striped m-0">
+                    <thead>
+                    <tr>
+                        <th>NO.</th>
+                        <th>类型名称</th>
+                        <th>类型描述</th>
+                        <th>类型规则</th>
+                        <th>录入时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                 <tr>
+                    {foreach name="question_list" item="data"}
+                     <td>{$data.id}</td>
+                     <td>{$data.q_type_name}</td>
+                     <td>{$data.q_type_dis}</td>
+                     <td>{$data.q_type_rule}</td>
+                     <td>{$data.q_type_addtime|date='Y-m-d H:i:s',###}</td>
+                     <td>
+                         <a data-action="modal" class=" on-default " href="{:url('Paper/edit_view',['id'=>$data.id])}"><i class="fa fa-pencil"></i></a>
+                         <a data-action="modal" class=" on-default " href="{:url('Paper/delete_view',['id'=>$data.id])}"><i class="fa md-delete"></i></a>
+                     </td>
+                     {/foreach}
+                 </tr>
+                    </tbody>
+                </table>
+                <!---内容区域end--->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row"><div class="col-lg-12"><div id="page"></div></div></div>

@@ -1,0 +1,18 @@
+<form action="{:url('Paper/do_del')}" method="post" enctype="multipart/form-data" data-toggle="ajaxform" id="myform" class="form-horizontal" role="form" data-animation="modal" data-parsley-validate novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h4 class="modal-title">提示</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="col-md-9">
+                <p class="form-control-static">是否确定要删除这卷试卷?</p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="id" value="{$id}">
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-danger waves-effect waves-light">删除</button>
+    </div>
+</form>
