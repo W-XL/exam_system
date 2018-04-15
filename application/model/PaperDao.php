@@ -46,4 +46,19 @@ class PaperDao extends Model{
             ->insert();
     }
 
+    public function get_question_type_info($id){
+        return Db::table('tb_question_type')->where('id='.$id)->find();
+    }
+
+    public function update_q_type($params){
+        Db::table('tb_question_type')
+            ->where('id',$params['id'])
+            ->update(['q_type_name'=>$params['q_type_name'],'q_type_dis'=>$params['q_type_dis'],'q_type_rule'=>$params['q_type_rule']]);
+
+    }
+
+    public function get_question_list(){
+        return Db::table('tb_questions')->select();
+    }
+
  }

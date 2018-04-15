@@ -80,4 +80,28 @@ class Paper extends Controller{
         $this->succeed_msg();
     }
 
+    public function question_type_edit(){
+        $id = input()['id'];
+        $paper_dao = Loader::model('PaperDao');
+        $info = $paper_dao->get_question_type_info($id);
+        $this->assign("info", $info);
+        return view("question_type_edit");
+    }
+
+    public function do_edit_type(){
+        if(!$_POST['q_type_name']){
+            $this->error_msg('试题类型名称不能为空');
+        }
+        $paper_dao = Loader::model('PaperDao');
+        $paper_dao->update_q_type($_POST);
+        $this->succeed_msg();
+    }
+
+    public function question_list(){
+        $paper_dao = Loader::model('PaperDao');
+        $question_list = $paper_dao->get_question_list();
+        $this->assign('question_list',$question_list);
+        return view('question_list');
+    }
+
 }

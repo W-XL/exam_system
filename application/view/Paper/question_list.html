@@ -12,7 +12,7 @@
                 <form  id="form_data">
                     <div class="col-sm-12 text-xs-center">
                         <div class="col-md-1">
-                            <button data-action="modal" class="btn btn-default m-b-20" href="{:url('Paper/add_question_type')}"><i class="fa fa-plus m-r-5"></i>添加题目类型</button>
+                            <button data-action="modal" class="btn btn-default m-b-20" href="{:url('Paper/add_question')}"><i class="fa fa-plus m-r-5"></i>添加题目类型</button>
                         </div>
                     </div>
                 </form>
@@ -24,9 +24,10 @@
                     <thead>
                     <tr>
                         <th>NO.</th>
-                        <th>类型名称</th>
-                        <th>类型描述</th>
-                        <th>类型规则</th>
+                        <th>试题类型</th>
+                        <th>试题内容</th>
+                        <th>试题分数</th>
+                        <th>试题答案</th>
                         <th>录入时间</th>
                         <th>操作</th>
                     </tr>
@@ -35,10 +36,6 @@
                     {foreach name="question_list" item="data"}
                     <tr>
                      <td>{$data.id}</td>
-                     <td>{$data.q_type_name}</td>
-                     <td>{$data.q_type_dis}</td>
-                     <td>{$data.q_type_rule}</td>
-                     <td>{$data.q_type_addtime|date='Y-m-d H:i:s',###}</td>
                      <td>
                          <a data-action="modal" class=" on-default " href="{:url('Paper/question_type_edit',['id'=>$data.id])}"><i class="fa fa-pencil"></i></a>
                      </td>
