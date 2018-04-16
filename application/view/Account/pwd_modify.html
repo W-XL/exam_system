@@ -1,0 +1,26 @@
+<script type="text/javascript" src="__STATIC__/assets/plugins/parsleyjs/dist/parsley.min.js"></script>
+<form action="{:url('Account/do_modify_pwd')}" method="post" enctype="multipart/form-data" data-toggle="ajaxform" id="myform" class="form-horizontal" role="form" data-animation="modal" data-parsley-validate novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h4 class="modal-title">密码修改</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="col-md-3 control-label">密码</label>
+            <div class="col-md-9">
+                <input type="password" id="pwd" class="form-control" parsley-trigger="change" required name="password" value="" minlength="6"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 control-label">再次输入密码</label>
+            <div class="col-md-9">
+                <input type="password" data-parsley-equalto="#pwd" class="form-control" parsley-trigger="change" required name="re_pwd" value="" minlength="6" />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="id" value="{$id}" />
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-info waves-effect waves-light">保存</button>
+    </div>
+</form>

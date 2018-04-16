@@ -8,7 +8,7 @@ class LoginDao extends Model{
 
     public function GetAdmins($account){
         return Db::table('tb_users')
-            ->field('u.*,r.rules,ur.role_id')
+            ->field('u.*,r.rules,r.name,ur.role_id')
             ->alias('u')
             ->join('tb_user_role_access ur','ur.user_id = u.id')
             ->join('tb_roles r','ur.role_id = r.id')

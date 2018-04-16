@@ -7,6 +7,12 @@ use think\Loader;
 
 class Menu extends Controller{
 
+    public function _initialize(){
+        if (!check_login_common()){
+            $this->redirect('Login/index');
+        }
+    }
+
     public function index(){
         $menu_dao = Loader::model('MenuDao');
         $top_list = $menu_dao->get_cate_menu(0);
