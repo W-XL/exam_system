@@ -6,26 +6,13 @@ use think\Db;
 
 class LoginDao extends Model{
 
-    public function GetAdminMenus(){
-        return   Db::table('tb_menues')->select();
-    }
-
     public function GetAdmins($account){
         return Db::table('tb_users')
-            ->where('account="' . $account . '"')
-            ->find();
-    }
-
-    public function GetInfo($user_id){
-        return Db::table('admins')->where('id = ' . $user_id)->find();
-    }
-
-    public function get_roles_info($user_id){
-        return  Db::table('tb_user_role_access')
-            ->alias('a')
-            ->join(['tb_roles'=>'r'],'a.role_id=r.id','left')
-            ->where('a.user_id="'.$user_id.'"')
-            ->field('a.user_id,r.*')
+            ->field('u.*,r.rules,ur.role_id')
+            ->alias('u')
+            ->join('tb_user_role_access ur','ur.user_id = u.id')
+            ->join('tb_roles r','ur.role_id = r.id')
+            ->where('u.account="' . $account . '"')
             ->find();
     }
 

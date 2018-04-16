@@ -2,7 +2,7 @@
 namespace app\controller;
 
 use think\Controller;
-use think\Session;
+use think\Request;
 use think\Loader;
 
 class Menu extends Controller{
@@ -23,7 +23,7 @@ class Menu extends Controller{
     }
 
     public function add_view(){
-        $pid = input()['id'];
+        $pid = Request::instance()->param('id');
         if(!$pid){
             $pmenu = array("id"=>0,"name"=>"顶级菜单");
         }else{
@@ -35,16 +35,17 @@ class Menu extends Controller{
     }
 
     public function do_add(){
-        if(!isset($_POST['pid']) || !$_POST['name'] || !isset($_POST['status'])){
-            $this->error_msg("缺少必填项");
+        $params = Request::instance()->param();
+        if(!isset($params['pid']) || !$params['name'] || !isset($params['status'])){
+            return error_msg('缺少必填项');
         }
         $menu_dao = Loader::model('MenuDao');
-        $menu_dao->insert_menu($_POST);
-        $this->succeed_msg();
+        $menu_dao->insert_menu($params);
+        return succeed_msg();
     }
 
     public function edit_view(){
-        $id = input()['id'];
+        $id = Request::instance()->param('id');
         $menu_dao = Loader::model('MenuDao');
         $info = $menu_dao->get_menu($id);
         if($info['pid']==0){
@@ -60,12 +61,13 @@ class Menu extends Controller{
     }
 
     public function do_edit(){
-        if(!isset($_POST['pid']) || !$_POST['name'] || !isset($_POST['status'])){
-            $this->error_msg("缺少必填项");
+        $params = Request::instance()->param();
+        if(!isset($params['pid']) || !$params['name'] || !isset($params['status'])){
+            return error_msg('缺少必填参数');
         }
         $menu_dao = Loader::model('MenuDao');
-        $menu_dao->update_menu($_POST);
-        $this->succeed_msg();
+        $menu_dao->update_menu($params);
+        return succeed_msg();
     }
 
 }

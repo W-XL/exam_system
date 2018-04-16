@@ -4,6 +4,7 @@ namespace app\controller;
 use think\Controller;
 use think\Session;
 use think\Loader;
+use think\Request;
 
 class Login extends Controller{
 
@@ -15,22 +16,10 @@ class Login extends Controller{
         return $this->fetch('login');
     }
 
-    public function do_login1(){
-        //判断是否登录成功
-        if (true){
-            Session::set('user_id',71);
-            Session::set('user_name','admin');
-            return $this->fetch('Index/index');
-        }else{
-            Session::set('err_msg','密码错误');
-            $this->redirect('Login/index');
-        }
-    }
-
     public function do_login(){
-        $params = $_POST;
+        $params = Request::instance()->param();
         if(!$params['account'] || !$params['user_pwd']){
-            $this->error("缺少必填项");
+            $this->error('缺少必填项');
         }
         if($this->userPwdCheck($params)){
             $this->redirect('Index/index');
@@ -57,8 +46,7 @@ class Login extends Controller{
         }else{
             $menu_arr = "";
             if($user_info['id']){
-                $perm_info = $login_dao->get_roles_info($user_info['id']);
-                $menu_arr =explode(',',$perm_info['rules']);
+                $menu_arr =explode(',',$user_info['rules']);
             }
             $m_list = $login_dao ->get_module_list();
             foreach($m_list as $key=>$data){
@@ -85,8 +73,7 @@ class Login extends Controller{
             }
             Session::set('menu_list',$m_list);
             Session::set('user_id',$user_info['id']);
-            Session::set('user_name',$user_info['account']);
-            Session::delete('login_error_msg');
+            Session::set('user_name',$user_info['user_name']);
             return true;
         }
 
@@ -94,8 +81,8 @@ class Login extends Controller{
 
     public function do_logout(){
         Session::delete('user_id');
-        Session::delete('group_id');
         Session::delete('menu_list');
+        Session::delete('user_name');
         Session::delete('err_msg');
         $this->redirect('Login/index');
     }
