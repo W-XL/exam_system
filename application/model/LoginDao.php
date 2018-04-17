@@ -24,5 +24,9 @@ class LoginDao extends Model{
         return Db::table('tb_menues')->where('status = 0')->where('pid='.$pid)->select();
     }
 
-
+    public function update_login_time($id,$ip){
+        Db::table('tb_users')
+            ->where('id',$id)
+            ->update(['login_time'=>time(),'login_ip'=>$ip]);
+    }
  }

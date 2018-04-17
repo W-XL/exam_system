@@ -25,6 +25,7 @@
                     <tr>
                         <th>NO.</th>
                         <th>试题类型</th>
+                        <th>试题题目</th>
                         <th>试题内容</th>
                         <th>试题分数</th>
                         <th>试题答案</th>
@@ -36,8 +37,14 @@
                     {foreach name="question_list" item="data"}
                     <tr>
                      <td>{$data.id}</td>
+                        <td>{$data.q_type_name}</td>
+                        <td>{$data.q_title}</td>
+                        <td>{$data.q_content}</td>
+                        <td>{$data.q_score}</td>
+                        <td>{$data.q_answer}</td>
+                        <td>{$data.q_addtime|date='Y-m-d H:i:s',###}</td>
                      <td>
-                         <a data-action="modal" class=" on-default " href="{:url('Paper/question_type_edit',['id'=>$data.id])}"><i class="fa fa-pencil"></i></a>
+                         <a data-action="modal" class=" on-default " href="{:url('Paper/question_edit',['id'=>$data.id])}"><i class="fa fa-pencil"></i></a>
                      </td>
                     </tr>
                      {/foreach}

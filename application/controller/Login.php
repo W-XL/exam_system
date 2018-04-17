@@ -71,6 +71,8 @@ class Login extends Controller{
                 }
                 $m_list[$key]['p_menu']=$p_menu_list;
             }
+            $request = Request::instance();
+            $login_dao->update_login_time($user_info['id'], $request->ip());
             Session::set('menu_list',$m_list);
             Session::set('user_id',$user_info['id']);
             Session::set('user_name',$user_info['user_name']);
