@@ -26,25 +26,33 @@
                         <th>NO.</th>
                         <th>试卷名称</th>
                         <th>考试限制时间</th>
+                        <th>单选题</th>
+                        <th>多选题</th>
+                        <th>填空题</th>
+                        <th>简答题</th>
                         <th>试卷描述信息</th>
                         <th>录入时间</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                 <tr>
                     {foreach name="paper_list" item="data"}
+                    <tr>
                      <td>{$data.id}</td>
                      <td>{$data.paper_name}</td>
-                     <td>{$data.exam_time}</td>
+                     <td>{$data.exam_time/60}</td>
+                        <td>{$data.single_question}</td>
+                        <td>{$data.multiple_question}</td>
+                        <td>{$data.completion}</td>
+                        <td>{$data.short_answer}</td>
                      <td>{$data.paper_ids}</td>
                      <td>{$data.paper_addtime|date='Y-m-d H:i:s',###}</td>
                      <td>
                          <a data-action="modal" class=" on-default " href="{:url('Paper/edit_view',['id'=>$data.id])}"><i class="fa fa-pencil"></i></a>
                          <a data-action="modal" class=" on-default " href="{:url('Paper/delete_view',['id'=>$data.id])}"><i class="fa md-delete"></i></a>
                      </td>
+                    </tr>
                      {/foreach}
-                 </tr>
                     </tbody>
                 </table>
                 <!---内容区域end--->

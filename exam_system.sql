@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-04-17 17:39:04
+Date: 2018-04-19 19:11:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -61,6 +61,26 @@ CREATE TABLE `tb_papers` (
 -- Records of tb_papers
 -- ----------------------------
 INSERT INTO `tb_papers` VALUES ('1', '中考试题', '期中考试', '1523845803', '1523845809', '91', null, '0');
+
+-- ----------------------------
+-- Table structure for `tb_paper_record`
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_paper_record`;
+CREATE TABLE `tb_paper_record` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `paper_id` int(11) DEFAULT NULL,
+  `paper_res` text,
+  `paper_scord` float DEFAULT NULL,
+  `do_id` int(11) DEFAULT NULL,
+  `paper_change_id` int(11) DEFAULT NULL,
+  `paper_submit_time` int(11) unsigned DEFAULT NULL,
+  `paper_change_time` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of tb_paper_record
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `tb_questions`
@@ -177,16 +197,3 @@ INSERT INTO `tb_user_role_access` VALUES ('9', '2');
 INSERT INTO `tb_user_role_access` VALUES ('10', '2');
 INSERT INTO `tb_user_role_access` VALUES ('11', '2');
 INSERT INTO `tb_user_role_access` VALUES ('12', '2');
-
-DROP TABLE IF EXISTS `tb_paper_record`;
-CREATE TABLE `tb_paper_record` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `paper_id` int(11) DEFAULT NULL,
-  `paper_res` text,
-  `paper_scord` float DEFAULT NULL,
-  `do_id` int(11) DEFAULT NULL,
-  `paper_change_id` int(11) DEFAULT NULL,
-  `paper_submit_time` int(11) unsigned DEFAULT NULL,
-  `paper_change_time` int(11) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;

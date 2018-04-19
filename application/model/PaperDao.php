@@ -17,7 +17,7 @@ class PaperDao extends Model{
     }
 
     public function insert_paper($params){
-        $data = ['paper_name'=>$params['paper_name'],'paper_ids'=>$params['paper_ids'],'paper_addtime'=>time(),'exam_time'=>$params['exam_time']];
+        $data = ['paper_name'=>$params['paper_name'],'paper_ids'=>$params['paper_ids'],'paper_addtime'=>time(),'exam_time'=>$params['exam_time']*60,'single_question'=>$params['single_question'],'multiple_question'=>$params['multiple_question'],'completion'=>$params['completion'],'short_answer'=>$params['short_answer']];
         Db::name('tb_papers')
             ->data($data)
             ->insert();
@@ -26,7 +26,7 @@ class PaperDao extends Model{
     public function update_paper($params){
         Db::table('tb_papers')
             ->where('id',$params['id'])
-            ->update(['paper_name'=>$params['paper_name'],'paper_ids'=>$params['paper_ids'],'exam_time'=>$params['exam_time'],'paper_modifytime'=>time()]);
+            ->update(['paper_name'=>$params['paper_name'],'paper_ids'=>$params['paper_ids'],'exam_time'=>$params['exam_time']*60,'paper_modifytime'=>time(),'single_question'=>$params['single_question'],'multiple_question'=>$params['multiple_question'],'completion'=>$params['completion'],'short_answer'=>$params['short_answer']]);
     }
 
     public function delete_paper($id){

@@ -20,8 +20,12 @@ class Paper extends Controller{
 
     public function do_add(){
         $params = Request::instance()->param();
-        if(!isset($params['paper_name']) || !$params['exam_time']){
+        if(!$params['paper_name'] || !$params['exam_time']){
             return error_msg("缺少必填项");
+        }
+        $num = $params['single_question'] +$params['multiple_question'] +$params['completion']+$params['short_answer'];
+        if($num == '0'){
+            return error_msg('试题总和不能为0');
         }
         $paper_dao = Loader::model('PaperDao');
         $paper_dao->insert_paper($params);
@@ -40,6 +44,10 @@ class Paper extends Controller{
         $params = Request::instance()->param();
         if(!isset($params['paper_name']) || !$params['exam_time']){
             return error_msg("缺少必填项");
+        }
+        $num = $params['single_question'] +$params['multiple_question'] +$params['completion']+$params['short_answer'];
+        if($num == '0'){
+            return error_msg('试题总和不能为0');
         }
         $paper_dao = Loader::model('PaperDao');
         $paper_dao->update_paper($_POST);
