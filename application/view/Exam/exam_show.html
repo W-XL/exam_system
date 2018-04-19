@@ -1,0 +1,125 @@
+<form action="" method="post" enctype="multipart/form-data" data-toggle="ajaxform" id="exam_show" class="form-horizontal" role="form" data-animation="modal" data-parsley-validate novalidate>
+    <div class="modal-header">
+        <h4 class="modal-title">考试</h4>
+    </div>
+    <div class="modal-body">
+        <div class="text-center form-group" id="time_clock">
+
+        </div>
+            <div class="col-sm-12 text-center" id="exam_content" style="font-size: 25px;">
+
+            </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-info waves-effect waves-light" id="all_question"></button>
+        <button class="btn btn-info waves-effect waves-light" id="last_question">上一题</button>
+        <button class="btn btn-info waves-effect waves-light" id="next_question">下一题</button>
+        <button type="submit" class="btn btn-info waves-effect waves-light">交卷</button>
+        <input type="hidden" value="" id="paper_id" />
+        <input type="hidden" value="1" id="question_id" />
+    </div>
+</form>
+<script>
+    $.ajax({
+        "url":"{:url('Exam/get_paper')}",
+                "type":"post",
+                "data":{
+                'start':1
+            },
+        "dataType":'json',
+        "success":function(res){
+            var result = JSON.parse(res);
+            if (result.statusCode == '200'){
+                $("#paper_id").val(result.message.paper_id);
+                question_chose(result.message.paper_id,$("#question_id").val());
+                var time_s = parseInt(result.message.paper_time);
+                function clock(){
+                    time_s--;
+                    var h = parseInt(time_s/3600);
+                    var m = parseInt(time_s%3600/60);
+                    var s = time_s%3600%60;
+                    return h.toString()+":"+m.toString()+":"+s.toString();
+                }
+                var time_obj = setInterval(function(){
+                    if (time_s === 0){
+                        clearInterval(time_obj);
+                        //时间到，提交考试
+                    }else{
+                        $("#time_clock").html("<h2>时间剩余："+clock()+"</h2>");
+                    }
+                },1000);
+            }else{
+                $.Notification.notify('error','top left', result.message);
+            }
+        },
+        "error":function(req,error){
+                $.Notification.notify('error','top left', "发生错误,HTTP代码:"+req.status, req.statusText);
+        }
+    });
+        //选择题目
+function question_chose(p_id,q_id){
+        $.ajax({
+            "url":"{:url('Exam/get_question')}",
+            "type":"post",
+            "data":{
+            'p_id':p_id,
+            'q_id':q_id
+            },
+            "dataType":'json',
+            "success":function(res){
+                var q_result = JSON.parse(res);
+                if (q_result.statusCode == '200'){
+                    $("#question_id").val(q_id);
+                    $("#all_question").text("共"+q_result.message.question_count+"题");
+                    var no = q_id.toString()+'、';
+                    var title = q_result.message.q_title;
+                    var score = '('+q_result.message.q_score.toString()+'分)';
+                    if (q_result.message.q_type_rule == 'checkbox'){
+                    //多选
+                        var content_arr = q_result.message.q_content.split(",");
+                        var content = '';
+                        for(var i=0;i<content_arr.length;i++){
+                            content += "<span style='margin-left: 20px;'>"+String.fromCharCode(65+i)+"、</span><input type='checkbox' value='' /><label>"+content_arr[i]+"</label>";
+                        }
+                    }else{
+
+                    }
+                    $("#exam_content").html("<p>"+no+title+score+"</p><div>"+content+"</div>");
+                }else{
+                    $.Notification.notify('error','top left', q_result.message);
+                }
+            },
+            "error":function(req,error){
+                    $.Notification.notify('error','top left', "发生错误,HTTP代码:"+req.status, req.statusText);
+            }
+        });
+    }
+    $("#last_question").on("click",function(){
+        var q_id = $("#question_id").val();
+        var p_id = $("#paper_id").val();
+        if (q_id == 1){
+            $.Notification.notify('error','top left', "已经是第一题");
+            return false;
+        }
+        if (!p_id){
+            $.Notification.notify('error','top left', "试卷错误");
+            return false;
+        }
+        question_chose(p_id,parseInt(q_id)-1);
+    });
+
+   $("#next_question").on("click",function(){
+        var q_id = $("#question_id").val();
+        var p_id = $("#paper_id").val();
+        var max_q = $("#all_question").text();
+        if (q_id == max_q.substr(1,1)){
+                $.Notification.notify('error','top left', "已经是最后一题");
+                return false;
+            }
+        if (!p_id){
+                $.Notification.notify('error','top left', "试卷错误");
+                return false;
+            }
+        question_chose(p_id,parseInt(q_id)+1);
+   });
+</script>

@@ -15,7 +15,15 @@ class Exam extends Controller {
     }
 
     public function index(){
+        $paper_dao = Loader::model('PaperDao');
+        $paper_list = $paper_dao->get_paper_list();
+        $this->assign('paper_list',$paper_list);
+        $this->assign("pages",$paper_list->render());
         return view();
+    }
+
+    public function exam_show(){
+        return view('exam_show');
     }
 
     public function get_paper(){

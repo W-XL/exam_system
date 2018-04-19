@@ -2,182 +2,39 @@
 <link href="__STATIC__/assets/plugins/multiselect/css/multi-select.css"  rel="stylesheet" type="text/css" />
 <link href="__STATIC__/assets/plugins/select2/select2.css" rel="stylesheet" type="text/css" />
 <link href="__STATIC__/assets/plugins/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
-<script src="__STATIC__/assets/plugins/switchery/dist/switchery.min.js"></script>
-<script type="text/javascript" src="__STATIC__/assets/plugins/multiselect/js/jquery.multi-select.js"></script>
-<script type="text/javascript" src="__STATIC__/assets/plugins/jquery-quicksearch/jquery.quicksearch.js"></script>
 <script src="__STATIC__/assets/plugins/select2/select2.min.js" type="text/javascript"></script>
 <script src="__STATIC__/assets/plugins/bootstrap-select/dist/js/bootstrap-select.min.js" type="text/javascript"></script>
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-            <div class="row">
-                <div class="col-sm-12 text-center" id="time_clock">
-
-                </div>
-                <div class="col-sm-12 text-center" id="exam_show" style="font-size: 25px;">
-                    <button class="btn btn-default m-b-20">开始考试</button>
-                </div>
-                <div class="col-sm-12 text-center" id="exam_controller" style="display: none;">
-                    <button class="btn btn-default m-b-20" id="all_question"></button>
-                    <button class="btn btn-default m-b-20" id="last_question">上一题</button>
-                    <button class="btn btn-default m-b-20" id="next_question">下一题</button>
-                    <button class="btn btn-default m-b-20" id="submit_exam">交卷</button>
-                </div>
-                <input type="hidden" value="" id="paper_id" />
-                <input type="hidden" value="1" id="question_id" />
+            <div class="table-responsive">
+                <!---核心内容列表区域-->
+                <table class="table table-striped m-0">
+                    <thead>
+                    <tr>
+                        <th>试卷编号</th>
+                        <th>试卷名称</th>
+                        <th>考试时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        {foreach name="paper_list" item="data"}
+                        <td>{$data.id}</td>
+                        <td>{$data.paper_name}</td>
+                        <td>{$data.exam_time}</td>
+                        <td>
+                            <button data-action="modal" class="btn btn-default m-b-20" href="{:url('Exam/exam_show')}">考试</button>
+                        </td>
+                        {/foreach}
+                    </tr>
+                    </tbody>
+                </table>
+                <!---内容区域end--->
             </div>
         </div>
     </div>
 </div>
-<script>
-    $("#exam_show").find('button').on("click",function(){
-        var button_text = $(this).text();
-        var start = 0;
-        if (button_text == '开始考试'){
-            start = 1;
-        }
-        $.ajax({
-            "url":"{:url('Exam/get_paper')}",
-            "type":"post",
-            "data":{
-                'start':start
-            },
-            "dataType":'json',
-            "success":function(res){
-                var result = JSON.parse(res);
-                if (result.statusCode == '200'){
-                    if (start == 1){
-                        $("#exam_controller").show();
-                        $("#paper_id").val(result.message.paper_id);
-                        question_chose(1,result.message.paper_id,$("#question_id").val(),1);
-                        var time_s = parseInt(result.message.paper_time);
-                        function clock(){
-                            time_s--;
-                            var h = parseInt(time_s/3600);
-                            var m = parseInt(time_s%3600/60);
-                            var s = time_s%3600%60;
-                            return h.toString()+":"+m.toString()+":"+s.toString();
-                        }
-                        var time_obj = setInterval(function(){
-                            if (time_s === 0){
-                                clearInterval(time_obj);
-                                //时间到，提交考试
-                            }else{
-                                $("#time_clock").html("<h2>"+clock()+"</h2>");
-                            }
-                        },1000);
-                    }
-                }else{
-                    $.Notification.notify('error','top left', result.message);
-                }
-            },
-            "error":function(req,error){
-                $.Notification.notify('error','top left', "发生错误,HTTP代码:"+req.status, req.statusText);
-            }
-        });
-    });
+<div class="row"><div class="col-lg-12"><div id="page">{$pages}</div></div></div>
 
-    //选择题目
-    function question_chose(statu,p_id,q_id,curr_id){
-        $.ajax({
-            "url":"{:url('Exam/get_question')}",
-            "type":"post",
-            "data":{
-                'p_id':p_id,
-                'q_id':q_id
-            },
-            "dataType":'json',
-            "success":function(res){
-                var q_result = JSON.parse(res);
-                if (q_result.statusCode == '200'){
-                    if (statu == 1){
-                        question_result(1,q_result.message.question_count,parseInt(curr_id));
-                    }else{
-                        question_result(0,q_result.message.question_count,parseInt(curr_id));
-                    }
-                    $("#question_id").val(q_id);
-                    $("#all_question").text("共"+q_result.message.question_count+"题");
-                    var no = q_id.toString()+'、';
-                    var title = q_result.message.q_title;
-                    var score = '('+q_result.message.q_score.toString()+'分)';
-                    if (q_result.message.q_type_rule == 'checkbox'){
-                        //多选
-                        var content_arr = q_result.message.q_content.split(",");
-                        var content = '';
-                        for(var i=0;i<content_arr.length;i++){
-                            content += "<span style='margin-left: 20px;'>"+String.fromCharCode(65+i)+"、</span><input type='checkbox' value='' /><label>"+content_arr[i]+"</label>";
-                        }
-                    }else{
-
-                    }
-                    $("#exam_show").html("<p>"+no+title+score+"</p><div>"+content+"</div>");
-                }else{
-                    $.Notification.notify('error','top left', q_result.message);
-                }
-            },
-            "error":function(req,error){
-                $.Notification.notify('error','top left', "发生错误,HTTP代码:"+req.status, req.statusText);
-            }
-        });
-    }
-
-    $("#last_question").on("click",function(){
-        var q_id = $("#question_id").val();
-        var p_id = $("#paper_id").val();
-        if (q_id == 1){
-            $.Notification.notify('error','top left', "已经是第一题");
-            return false;
-        }
-        if (!p_id){
-            $.Notification.notify('error','top left', "试卷错误");
-            return false;
-        }
-        question_chose(0,p_id,parseInt(q_id)-1,q_id);
-    });
-
-    $("#next_question").on("click",function(){
-        var q_id = $("#question_id").val();
-        var p_id = $("#paper_id").val();
-        var max_q = $("#all_question").text();
-        if (q_id == max_q.substr(1,1)){
-            $.Notification.notify('error','top left', "已经是最后一题");
-            return false;
-        }
-        if (!p_id){
-            $.Notification.notify('error','top left', "试卷错误");
-            return false;
-        }
-        question_chose(0,p_id,parseInt(q_id)+1,q_id);
-    });
-    //答题的结果
-    function question_result(status,q_count,current_id){
-        if (status == 1){
-            //初始化
-            var exam_res_arr = [];
-            for(var i=0;i<q_count;i++){
-                exam_res_arr.push('');
-            }
-            localStorage.setItem('q_res',JSON.stringify(exam_res_arr));
-        }else{
-            var ques_res = 'test';
-            var old_res = localStorage.getItem('q_res');
-            if (!old_res){
-                //写入新的
-                var new_res_arr = [];
-                for(var j=0;j<q_count;j++){
-                    if ((parseInt(current_id)-1) == j){
-                        new_res_arr[j] = ques_res;
-                    }else{
-                        new_res_arr.push('');
-                    }
-                }
-                localStorage.setItem('q_res',JSON.stringify(new_res_arr));
-            }else{
-                var old_obj = JSON.parse(old_res);
-                old_obj[parseInt(current_id)-1] = ques_res;
-                localStorage.setItem('q_res',JSON.stringify(old_obj));
-            }
-
-        }
-    }
-</script>

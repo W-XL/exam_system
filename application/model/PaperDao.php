@@ -13,7 +13,7 @@ class PaperDao extends Model{
     public function get_paper_list(){
         return Db::table('tb_papers')
             ->where('is_del=0')
-            ->select();
+            ->paginate(10);
     }
 
     public function insert_paper($params){

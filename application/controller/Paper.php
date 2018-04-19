@@ -11,6 +11,7 @@ class Paper extends Controller{
         $paper_dao = Loader::model('PaperDao');
         $paper_list = $paper_dao->get_paper_list();
         $this->assign('paper_list',$paper_list);
+        $this->assign("pages",$paper_list->render());
         return view('index');
     }
 
