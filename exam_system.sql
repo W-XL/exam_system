@@ -177,3 +177,16 @@ INSERT INTO `tb_user_role_access` VALUES ('9', '2');
 INSERT INTO `tb_user_role_access` VALUES ('10', '2');
 INSERT INTO `tb_user_role_access` VALUES ('11', '2');
 INSERT INTO `tb_user_role_access` VALUES ('12', '2');
+
+DROP TABLE IF EXISTS `tb_paper_record`;
+CREATE TABLE `tb_paper_record` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `paper_id` int(11) DEFAULT NULL,
+  `paper_res` text,
+  `paper_scord` float DEFAULT NULL,
+  `do_id` int(11) DEFAULT NULL,
+  `paper_change_id` int(11) DEFAULT NULL,
+  `paper_submit_time` int(11) unsigned DEFAULT NULL,
+  `paper_change_time` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
