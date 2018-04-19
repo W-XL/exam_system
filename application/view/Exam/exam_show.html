@@ -1,4 +1,4 @@
-<form action="" method="post" enctype="multipart/form-data" data-toggle="ajaxform" id="exam_show" class="form-horizontal" role="form" data-animation="modal" data-parsley-validate novalidate>
+<form action="{:url('Exam/exam_submit')}" method="post" enctype="multipart/form-data" data-toggle="ajaxform" id="exam_show" class="form-horizontal" role="form" data-animation="modal" data-parsley-validate novalidate>
     <div class="modal-header">
         <h4 class="modal-title">考试</h4>
     </div>
@@ -6,33 +6,38 @@
         <div class="text-center form-group" id="time_clock">
 
         </div>
-            <div class="col-sm-12 text-center" id="exam_content" style="font-size: 25px;">
+        <div class="form-group text-center" id="exam_content" style="font-size: 25px;">
 
-            </div>
+        </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-info waves-effect waves-light" id="all_question"></button>
-        <button class="btn btn-info waves-effect waves-light" id="last_question">上一题</button>
-        <button class="btn btn-info waves-effect waves-light" id="next_question">下一题</button>
+        <button type="button" class="btn btn-info waves-effect waves-light" id="all_question"></button>
+        <button type="button" class="btn btn-info waves-effect waves-light" id="next_question">下一题</button>
         <button type="submit" class="btn btn-info waves-effect waves-light">交卷</button>
-        <input type="hidden" value="" id="paper_id" />
-        <input type="hidden" value="1" id="question_id" />
+        <input type="hidden" value="{$paper_id}" id="paper_id" name="paper_id" />
+        <input type="hidden" value="1" id="question_id" name="question_id" />
+        <input type="hidden" value="" id="question_type" name="question_type" />
+        <input type="hidden" value="" id="curren_exam_id" name="curren_exam_id" />
+        <input type="hidden" value="" id="submit_res" name="submit_res" />
     </div>
 </form>
 <script>
+    var time_obj = null;
     $.ajax({
         "url":"{:url('Exam/get_paper')}",
                 "type":"post",
                 "data":{
-                'start':1
+                'start':1,
+                'p_id':$("#paper_id").val()
             },
         "dataType":'json',
         "success":function(res){
             var result = JSON.parse(res);
             if (result.statusCode == '200'){
                 $("#paper_id").val(result.message.paper_id);
+                $("#curren_exam_id").val(result.message.curr_exam_id);
                 question_chose(result.message.paper_id,$("#question_id").val());
-                var time_s = parseInt(result.message.paper_time);
+                var time_s = parseInt(result.message.paper_time)*60;
                 function clock(){
                     time_s--;
                     var h = parseInt(time_s/3600);
@@ -40,10 +45,10 @@
                     var s = time_s%3600%60;
                     return h.toString()+":"+m.toString()+":"+s.toString();
                 }
-                var time_obj = setInterval(function(){
+                time_obj = setInterval(function(){
                     if (time_s === 0){
-                        clearInterval(time_obj);
                         //时间到，提交考试
+                        $("#exam_show").submit();
                     }else{
                         $("#time_clock").html("<h2>时间剩余："+clock()+"</h2>");
                     }
@@ -74,16 +79,29 @@ function question_chose(p_id,q_id){
                     var no = q_id.toString()+'、';
                     var title = q_result.message.q_title;
                     var score = '('+q_result.message.q_score.toString()+'分)';
+                    $("#question_type").val(q_result.message.q_type_rule);
                     if (q_result.message.q_type_rule == 'checkbox'){
                     //多选
                         var content_arr = q_result.message.q_content.split(",");
                         var content = '';
                         for(var i=0;i<content_arr.length;i++){
-                            content += "<span style='margin-left: 20px;'>"+String.fromCharCode(65+i)+"、</span><input type='checkbox' value='' /><label>"+content_arr[i]+"</label>";
+                            content += "<span style='margin-left: 20px;'>"+String.fromCharCode(65+i)+"、</span><input type='checkbox' value='"+String.fromCharCode(65+i)+"' /><label>"+content_arr[i]+"</label>";
                         }
-                    }else{
+                    }else if(q_result.message.q_type_rule == 'radio'){
+                    //单选
+                        var content_arr = q_result.message.q_content.split(",");
+                        var content = '';
+                        for(var i=0;i<content_arr.length;i++){
+                            content += "<span style='margin-left: 20px;'>"+String.fromCharCode(65+i)+"、</span><input type='radio' name='myradio' value='"+String.fromCharCode(65+i)+"' /><label>"+content_arr[i]+"</label>";
+                        }
+                    }else if (q_result.message.q_type_rule == 'text'){
+                    //填空
+
+                    }else if(q_result.message.q_type_rule == 'longtext'){
+                        //简答
 
                     }
+
                     $("#exam_content").html("<p>"+no+title+score+"</p><div>"+content+"</div>");
                 }else{
                     $.Notification.notify('error','top left', q_result.message);
@@ -94,19 +112,19 @@ function question_chose(p_id,q_id){
             }
         });
     }
-    $("#last_question").on("click",function(){
-        var q_id = $("#question_id").val();
-        var p_id = $("#paper_id").val();
-        if (q_id == 1){
-            $.Notification.notify('error','top left', "已经是第一题");
-            return false;
-        }
-        if (!p_id){
-            $.Notification.notify('error','top left', "试卷错误");
-            return false;
-        }
-        question_chose(p_id,parseInt(q_id)-1);
-    });
+//    $("#last_question").on("click",function(){
+//        var q_id = $("#question_id").val();
+//        var p_id = $("#paper_id").val();
+//        if (q_id == 1){
+//            $.Notification.notify('error','top left', "已经是第一题");
+//            return false;
+//        }
+//        if (!p_id){
+//            $.Notification.notify('error','top left', "试卷错误");
+//            return false;
+//        }
+//        question_chose(p_id,parseInt(q_id)-1);
+//    });
 
    $("#next_question").on("click",function(){
         var q_id = $("#question_id").val();
@@ -120,6 +138,58 @@ function question_chose(p_id,q_id){
                 $.Notification.notify('error','top left', "试卷错误");
                 return false;
             }
+        curr_q_res();
         question_chose(p_id,parseInt(q_id)+1);
    });
+    //记录当前题结果
+	function curr_q_res(){
+		var q_type = $("#question_type").val();
+        if (q_type == 'checkbox'){
+            var re = '';
+            $(":checked").each(function(){
+                re += $(this).val()+",";
+            });
+        }else if(q_type == 'radio'){
+            var re = $(":checked").val();
+        }else if(q_type == 'text'){
+
+        }else if(q_type == 'longtext'){
+
+        }
+        $.ajax({
+            "url":"{:url('Exam/do_question')}",
+            "type":"post",
+            "data":{
+                'q_res':re,
+                'p_id':$("#paper_id").val(),
+                'q_id':$("#question_id").val(),
+                'c_e_id':$("#curren_exam_id").val()
+            },
+            "dataType":'text',
+            "success":function(res){
+
+            },
+            "error":function(req,error){
+                $.Notification.notify('error','top left', "发生错误,HTTP代码:"+req.status, req.statusText);
+            }
+        });
+	}
+
+    $("#exam_show").on("submit",function () {
+        clearInterval(time_obj);
+        var q_type = $("#question_type").val();
+        if (q_type == 'checkbox'){
+            var re = '';
+            $(":checked").each(function(){
+                re += $(this).val()+",";
+            });
+        }else if(q_type == 'radio'){
+            var re = $(":checked").val();
+        }else if(q_type == 'text'){
+
+        }else if(q_type == 'longtext'){
+
+        }
+        $("#submit_res").val(re);
+    });
 </script>

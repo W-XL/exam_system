@@ -12,9 +12,10 @@
                 <table class="table table-striped m-0">
                     <thead>
                     <tr>
-                        <th>试卷编号</th>
+                        <th>阅卷编号</th>
                         <th>试卷名称</th>
-                        <th>考试时间(分钟)</th>
+                        <th>考试者id</th>
+                        <th>考试提交时间</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -23,9 +24,10 @@
                         {foreach name="paper_list" item="data"}
                         <td>{$data.id}</td>
                         <td>{$data.paper_name}</td>
-                        <td>{$data.exam_time}</td>
+                        <td>{$data.do_id}</td>
+                        <td>{$data.paper_submit_time}</td>
                         <td>
-                            <button data-action="modal" class="btn btn-default m-b-20" href="{:url('Exam/exam_show',['p_id'=>$data.id])}">考试</button>
+                            <button data-action="modal" class="btn btn-default m-b-20" href="">阅卷</button>
                         </td>
                         {/foreach}
                     </tr>

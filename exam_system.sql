@@ -70,11 +70,12 @@ CREATE TABLE `tb_paper_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `paper_id` int(11) DEFAULT NULL,
   `paper_res` text,
-  `paper_scord` float DEFAULT NULL,
+  `paper_scord` float(8,1) DEFAULT 0,
   `do_id` int(11) DEFAULT NULL,
   `paper_change_id` int(11) DEFAULT NULL,
   `paper_submit_time` int(11) unsigned DEFAULT NULL,
   `paper_change_time` int(11) unsigned DEFAULT NULL,
+  `status` tinyint(1) unsigned DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
