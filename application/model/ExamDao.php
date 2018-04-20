@@ -58,4 +58,10 @@ class ExamDao extends Model{
             ->where('pr.status=1')
             ->paginate(10);
     }
+
+    public function update_exam_teacher($params){
+        Db::table('tb_paper_record')
+            ->where('id='.$params['p_record_id'])
+            ->update(["paper_change_time"=>time(),"status"=>2]);
+    }
 }

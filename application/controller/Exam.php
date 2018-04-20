@@ -125,7 +125,15 @@ class Exam extends Controller {
 
     public function exam_mark_show(){
         //只阅简答题
-        
+        $params = Request::instance()->param();
+        if ($params['p_record_id']){
+            $exam_dao = Loader::model('ExamDao');
+            //$paper_record_res = $exam_dao->get_exam_record_by_id($params['p_record_id']);
+            $exam_dao->update_exam_teacher($params);
+            return view('exam_mark_check');
+        }else{
+            return '参数错误';
+        }
     }
 
 }
