@@ -136,4 +136,13 @@ class Exam extends Controller {
         }
     }
 
+    //查询成绩
+    public function exam_score(){
+        $exam_dao = Loader::model('ExamDao');
+        $res_list = $exam_dao->get_exam_res_list(Session::get('user_id'));
+        $this->assign('res_list',$res_list);
+        $this->assign("pages",$res_list->render());
+        return view('exam_score_show');
+    }
+
 }

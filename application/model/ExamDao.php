@@ -64,4 +64,14 @@ class ExamDao extends Model{
             ->where('id='.$params['p_record_id'])
             ->update(["paper_change_time"=>time(),"status"=>2]);
     }
+
+    public function get_exam_res_list($id){
+        return Db::table('tb_paper_record')
+            ->field('pr.*,p.paper_name')
+            ->alias('pr')
+            ->join('tb_papers p','pr.paper_id=p.id','LEFT')
+            ->where('pr.status=2')
+            ->where('do_id='.$id)
+            ->paginate(10);
+    }
 }
