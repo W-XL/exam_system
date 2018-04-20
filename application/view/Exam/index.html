@@ -19,16 +19,16 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
                         {foreach name="paper_list" item="data"}
+                        <tr>
                         <td>{$data.id}</td>
                         <td>{$data.paper_name}</td>
                         <td>{$data.exam_time}</td>
                         <td>
                             <button data-action="modal" class="btn btn-default m-b-20" href="{:url('Exam/exam_show',['p_id'=>$data.id])}">考试</button>
                         </td>
+                        </tr>
                         {/foreach}
-                    </tr>
                     </tbody>
                 </table>
                 <!---内容区域end--->
